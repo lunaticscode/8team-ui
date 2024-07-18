@@ -2,11 +2,13 @@ import { FC, PropsWithChildren } from "react";
 import { useTabsContext } from "./Root";
 
 export interface TabsItemProps extends PropsWithChildren {
-  index: number;
+  index?: number;
 }
 const TabsItem: FC<TabsItemProps> = (props) => {
   const { children, index } = props;
   const { setCurrentIndex } = useTabsContext();
-  return <button onClick={() => setCurrentIndex(index)}>{children}</button>;
+  return (
+    <button onClick={() => setCurrentIndex(index ?? 0)}>{children}</button>
+  );
 };
 export default TabsItem;

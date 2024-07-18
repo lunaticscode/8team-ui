@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 import { useTabsContext } from "./Root";
 
 export interface TabsPannelProps extends PropsWithChildren {
-  index: number;
+  index?: number;
 }
 const TabsPannel: FC<TabsPannelProps> = (props) => {
   const { children, index } = props;

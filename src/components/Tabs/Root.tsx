@@ -1,12 +1,18 @@
 import {
+  Children,
   Dispatch,
   FC,
   PropsWithChildren,
+  ReactElement,
   SetStateAction,
   createContext,
   useContext,
+  cloneElement,
   useState,
+  useMemo,
 } from "react";
+import TabsItem from "./Item";
+import TabsPannel from "./Pannel";
 
 export interface TabsRootProps extends PropsWithChildren {}
 
@@ -36,8 +42,28 @@ const TabsRoot: FC<TabsRootProps> = (props) => {
     currentIndex,
     setCurrentIndex,
   };
+
+  const _children = useMemo(
+    () => Children.toArray(children),
+    [children]
+  ) as ReactElement[];
+  const [tabItems, tabPannels] = useMemo(
+    () => [
+      _children.filter((child) => child.type === TabsItem),
+      _children.filter((child) => child.type === TabsPannel),
+    ],
+    [_children]
+  );
   return (
-    <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>
+    // <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>
+    <TabsContext.Provider value={contextValue}>
+      {tabItems.map((tabItemComp, index) =>
+        cloneElement(tabItemComp, { ...tabItemComp.props, index })
+      )}
+      {tabPannels.map((tabPannelComp, index) =>
+        cloneElement(tabPannelComp, { ...tabPannelComp.props, index })
+      )}
+    </TabsContext.Provider>
   );
 };
 export default TabsRoot;
